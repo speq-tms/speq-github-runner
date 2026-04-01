@@ -1,0 +1,7 @@
+name: "speq github runner"
+description: "Run speq CLI in GitHub Actions"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "TODO: implement action steps"
+      shell: bash
