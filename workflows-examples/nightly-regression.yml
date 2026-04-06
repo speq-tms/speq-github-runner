@@ -1,0 +1,22 @@
+name: speq nightly regression
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  speq-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run full nightly suite
+        uses: stepankaziatko/speq-github-runner@v1
+        with:
+          mode: run
+          speq-root: .speq
+          env: ci
+          suite: suites
+          artifacts-prefix: speq-nightly

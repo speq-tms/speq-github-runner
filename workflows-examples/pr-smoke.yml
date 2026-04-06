@@ -1,0 +1,21 @@
+name: speq pr smoke
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  speq-pr-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run speq smoke suite
+        uses: stepankaziatko/speq-github-runner@v1
+        with:
+          mode: run
+          speq-root: .speq
+          env: ci
+          tags: smoke
+          artifacts-prefix: speq-pr

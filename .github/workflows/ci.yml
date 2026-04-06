@@ -8,4 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "TODO: add lint/test/build checks"
+      - name: Install actionlint
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash -s -- latest
+          echo "$PWD" >> "$GITHUB_PATH"
+      - name: Validate workflow files
+        run: ./actionlint
+      - name: Validate action metadata file exists
+        run: test -f action.yml
+      - name: Bash syntax checks
+        run: |
+          bash -n scripts/setup.sh
+          bash -n scripts/run_mode.sh
+          bash -n scripts/custom_mode.sh

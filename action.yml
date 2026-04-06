@@ -1,7 +1,139 @@
 name: "speq github runner"
-description: "Run speq CLI in GitHub Actions"
+description: "Composite action to setup and run speq-cli in CI"
+
+inputs:
+  mode:
+    description: "Action mode: setup | run | custom"
+    required: false
+    default: "run"
+  speq-root:
+    description: "Path passed to --speq-root"
+    required: false
+    default: "."
+  env:
+    description: "Value passed to --env"
+    required: false
+    default: ""
+  test:
+    description: "Single test path passed to --test"
+    required: false
+    default: ""
+  suite:
+    description: "Suite directory passed to --suite"
+    required: false
+    default: ""
+  tags:
+    description: "Comma-separated tags passed to --tags"
+    required: false
+    default: ""
+  skip-validate:
+    description: "If true, skip validate before run"
+    required: false
+    default: "false"
+  summary-output:
+    description: "Summary file path for speq run --output"
+    required: false
+    default: ".speq-artifacts/results/summary.json"
+  logs-output:
+    description: "Log file path for CLI output"
+    required: false
+    default: ".speq-artifacts/logs/speq-runner.log"
+  upload-artifacts:
+    description: "If true, upload summary/allure/log artifacts"
+    required: false
+    default: "true"
+  artifacts-prefix:
+    description: "Artifact name prefix"
+    required: false
+    default: "speq"
+  allure-dir:
+    description: "Path to allure results directory for upload"
+    required: false
+    default: "reports/allure"
+  setup-method:
+    description: "CLI installation method: release | cargo"
+    required: false
+    default: "release"
+  cli-version:
+    description: "CLI version or git ref; 'latest' for latest release"
+    required: false
+    default: "latest"
+  cli-repository:
+    description: "GitHub repository with speq-cli binaries/source"
+    required: false
+    default: "stepankaziatko/speq-cli"
+  cli-binary-name:
+    description: "Binary filename to install"
+    required: false
+    default: "speq"
+  custom-command:
+    description: "Shell command for custom mode"
+    required: false
+    default: ""
+  custom-artifact-paths:
+    description: "Newline-separated paths to upload in custom mode"
+    required: false
+    default: ""
+
+outputs:
+  summary-path:
+    description: "Resolved summary output path"
+    value: ${{ steps.run_mode.outputs.summary_path }}
+  logs-path:
+    description: "Resolved logs output path"
+    value: ${{ steps.run_mode.outputs.logs_path }}
+
 runs:
   using: "composite"
   steps:
-    - run: echo "TODO: implement action steps"
+    - id: setup_mode
+      if: ${{ inputs.mode == 'setup' || inputs.mode == 'run' }}
       shell: bash
+      run: bash "${{ github.action_path }}/scripts/setup.sh"
+      env:
+        INPUT_SETUP_METHOD: ${{ inputs.setup-method }}
+        INPUT_CLI_VERSION: ${{ inputs.cli-version }}
+        INPUT_CLI_REPOSITORY: ${{ inputs.cli-repository }}
+        INPUT_CLI_BINARY_NAME: ${{ inputs.cli-binary-name }}
+    - id: run_mode
+      if: ${{ inputs.mode == 'run' }}
+      shell: bash
+      run: bash "${{ github.action_path }}/scripts/run_mode.sh"
+      env:
+        INPUT_SPEQ_ROOT: ${{ inputs.speq-root }}
+        INPUT_ENV: ${{ inputs.env }}
+        INPUT_TEST: ${{ inputs.test }}
+        INPUT_SUITE: ${{ inputs.suite }}
+        INPUT_TAGS: ${{ inputs.tags }}
+        INPUT_SKIP_VALIDATE: ${{ inputs.skip-validate }}
+        INPUT_SUMMARY_OUTPUT: ${{ inputs.summary-output }}
+        INPUT_LOGS_OUTPUT: ${{ inputs.logs-output }}
+    - if: ${{ inputs.mode == 'run' && inputs.upload-artifacts == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifacts-prefix }}-summary
+        path: ${{ steps.run_mode.outputs.summary_path }}
+        if-no-files-found: warn
+    - if: ${{ inputs.mode == 'run' && inputs.upload-artifacts == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifacts-prefix }}-allure
+        path: ${{ inputs.allure-dir }}
+        if-no-files-found: warn
+    - if: ${{ inputs.mode == 'run' && inputs.upload-artifacts == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifacts-prefix }}-logs
+        path: ${{ steps.run_mode.outputs.logs_path }}
+        if-no-files-found: warn
+    - if: ${{ inputs.mode == 'custom' }}
+      shell: bash
+      run: bash "${{ github.action_path }}/scripts/custom_mode.sh"
+      env:
+        INPUT_CUSTOM_COMMAND: ${{ inputs.custom-command }}
+    - if: ${{ inputs.mode == 'custom' && inputs.upload-artifacts == 'true' && inputs.custom-artifact-paths != '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifacts-prefix }}-custom
+        path: ${{ inputs.custom-artifact-paths }}
+        if-no-files-found: warn
