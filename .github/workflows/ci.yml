@@ -21,3 +21,6 @@ jobs:
           bash -n scripts/setup.sh
           bash -n scripts/run_mode.sh
           bash -n scripts/custom_mode.sh
+          bash -n tests/smoke.sh
+      - name: Smoke test action scripts
+        run: bash tests/smoke.sh

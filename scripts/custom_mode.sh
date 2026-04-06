@@ -9,4 +9,4 @@ if [[ -z "$custom_command" ]]; then
 fi
 
 echo "running custom command"
-bash -lc "$custom_command"
+bash -c "$custom_command"

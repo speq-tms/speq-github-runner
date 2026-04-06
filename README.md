@@ -82,6 +82,11 @@ See ready-to-copy examples:
 - `workflows-examples/pr-smoke.yml`
 - `workflows-examples/nightly-regression.yml`
 
+For integration details:
+
+- `docs/usage.md`
+- `docs/troubleshooting.md`
+
 ## Release channel
 
 Use major tags in production workflows:
@@ -93,3 +98,10 @@ Use major tags in production workflows:
 ## Status
 
 Runner MVP is implemented and ready for demo projects.
+
+## Adoption checklist
+
+- Publish stable major tag (`v1`) and keep examples pinned to `@v1`.
+- Validate `setup`, `run`, and `custom` flows in CI on pull requests.
+- Verify artifact upload for every integration (`summary`, `allure`, `logs`).
+- Pin `cli-version` in critical production pipelines when deterministic behavior is required.
