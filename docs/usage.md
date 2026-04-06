@@ -3,7 +3,7 @@
 ## Setup only
 
 ```yaml
-- uses: stepankaziatko/speq-github-runner@main
+- uses: speq-tms/speq-github-runner@v1
   with:
     mode: setup
     setup-method: release
@@ -13,7 +13,7 @@
 ## Validate + run + report
 
 ```yaml
-- uses: stepankaziatko/speq-github-runner@main
+- uses: speq-tms/speq-github-runner@v1
   with:
     mode: run
     speq-root: .speq
@@ -24,7 +24,7 @@
 ## Custom orchestration
 
 ```yaml
-- uses: stepankaziatko/speq-github-runner@main
+- uses: speq-tms/speq-github-runner@v1
   with:
     mode: custom
     custom-command: |

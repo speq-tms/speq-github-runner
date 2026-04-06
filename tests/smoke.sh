@@ -100,7 +100,7 @@ test_setup_mode_invalid_method() {
   (
     export INPUT_SETUP_METHOD="bad-method"
     export INPUT_CLI_VERSION="latest"
-    export INPUT_CLI_REPOSITORY="stepankaziatko/speq-cli"
+    export INPUT_CLI_REPOSITORY="speq-tms/speq-cli"
     export INPUT_CLI_BINARY_NAME="speq"
     bash "${ROOT_DIR}/scripts/setup.sh"
   ) >"${output_file}" 2>&1

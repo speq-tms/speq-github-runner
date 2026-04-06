@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: stepankaziatko/speq-github-runner@v1
+      - uses: speq-tms/speq-github-runner@v1
         with:
           mode: run
           speq-root: .speq
@@ -62,7 +62,7 @@ jobs:
 - `artifacts-prefix`: upload artifact name prefix (default: `speq`)
 - `setup-method`: `release|cargo` (default: `release`)
 - `cli-version`: release tag (or `latest`), or tag when `setup-method=cargo`
-- `cli-repository`: GitHub repo with cli binaries/source (default: `stepankaziatko/speq-cli`)
+- `cli-repository`: GitHub repo with cli binaries/source (default: `speq-tms/speq-cli`)
 - `cli-binary-name`: binary name in archive/path (default: `speq`)
 - `custom-command`: command for `mode=custom`
 - `custom-artifact-paths`: newline-separated paths to upload in `mode=custom`

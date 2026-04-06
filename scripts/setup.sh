@@ -3,7 +3,7 @@ set -euo pipefail
 
 setup_method="${INPUT_SETUP_METHOD:-release}"
 cli_version="${INPUT_CLI_VERSION:-latest}"
-cli_repository="${INPUT_CLI_REPOSITORY:-stepankaziatko/speq-cli}"
+cli_repository="${INPUT_CLI_REPOSITORY:-speq-tms/speq-cli}"
 cli_binary_name="${INPUT_CLI_BINARY_NAME:-speq}"
 
 ensure_tools() {

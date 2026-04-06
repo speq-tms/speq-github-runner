@@ -64,7 +64,7 @@ inputs:
   cli-repository:
     description: "GitHub repository with speq-cli binaries/source"
     required: false
-    default: "stepankaziatko/speq-cli"
+    default: "speq-tms/speq-cli"
   cli-binary-name:
     description: "Binary filename to install"
     required: false

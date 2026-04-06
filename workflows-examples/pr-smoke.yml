@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run speq smoke suite
-        uses: stepankaziatko/speq-github-runner@v1
+        uses: speq-tms/speq-github-runner@v1
         with:
           mode: run
           speq-root: .speq

@@ -49,6 +49,6 @@ Do not move `v1` when releasing `v2`.
 
 Production users can choose:
 
-- `uses: stepankaziatko/speq-github-runner@v1` (recommended default)
-- `uses: stepankaziatko/speq-github-runner@v1.0.0` (exact version)
-- `uses: stepankaziatko/speq-github-runner@<commit_sha>` (strict pinning)
+- `uses: speq-tms/speq-github-runner@v1` (recommended default)
+- `uses: speq-tms/speq-github-runner@v1.0.0` (exact version)
+- `uses: speq-tms/speq-github-runner@<commit_sha>` (strict pinning)
