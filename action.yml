@@ -1,5 +1,8 @@
 name: "speq github runner"
 description: "Composite action to setup and run speq-cli in CI"
+branding:
+  icon: "check-square"
+  color: "green"
 
 inputs:
   mode:
