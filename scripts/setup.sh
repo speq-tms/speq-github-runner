@@ -30,7 +30,7 @@ if [[ "$setup_method" == "release" ]]; then
   ensure_tools curl tar sed
 
   if [[ "$cli_version" == "latest" ]]; then
-    version="$(curl -fsSL "https://api.github.com/repos/${cli_repository}/releases/latest" | sed -n 's/.*"tag_name": "\(.*\)".*/\1/p' | sed -n '1p')"
+    version="$(curl -fsSL "https://api.github.com/repos/${cli_repository}/releases" | sed -n 's/.*"tag_name": "\(.*\)".*/\1/p' | sed -n '1p')"
     if [[ -z "${version:-}" ]]; then
       echo "failed to resolve latest release tag from ${cli_repository}"
       exit 1
