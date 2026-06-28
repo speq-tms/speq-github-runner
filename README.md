@@ -36,6 +36,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Materialize SPEQ CI environment
+        env:
+          SPEQ_CI_BASE_URL: ${{ secrets.SPEQ_CI_BASE_URL }}
+          SPEQ_CI_SOURCE_HEADER: ${{ secrets.SPEQ_CI_SOURCE_HEADER }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          base_url = os.environ.get("SPEQ_CI_BASE_URL") or "https://jsonplaceholder.typicode.com"
+          source = os.environ.get("SPEQ_CI_SOURCE_HEADER") or "speq-github-actions"
+
+          path = Path(".speq/environments/ci.yaml")
+          path.parent.mkdir(parents=True, exist_ok=True)
+          path.write_text(
+              "\n".join(
+                  [
+                      "name: ci",
+                      f"baseUrl: {json.dumps(base_url)}",
+                      "headers:",
+                      f"  x-source: {json.dumps(source)}",
+                      "",
+                  ]
+              ),
+              encoding="utf-8",
+          )
+          PY
       - uses: speq-tms/speq-github-runner@v1
         with:
           mode: run
@@ -74,6 +102,22 @@ In `run` mode the action uploads:
 - `${artifacts-prefix}-summary`
 - `${artifacts-prefix}-allure`
 - `${artifacts-prefix}-logs`
+
+## CI secrets
+
+For MVP v1.0.0, workflows should generate `environments/ci.yaml` from GitHub Secrets before invoking SPEQ. Keep real values out of the repository, do not print the generated YAML, and do not upload it as an artifact.
+
+Recommended secret names are documented in `docs/usage.md`:
+
+- `SPEQ_CI_BASE_URL`
+- `SPEQ_CI_SOURCE_HEADER`
+- `SPEQ_CI_AUTH_TOKEN` for private APIs that need a bearer token.
+
+## Platform setup
+
+`setup-method: release` installs published Linux/macOS tarball assets from `speq-cli` releases. Pin `cli-version` after the CLI v1.0.0 artifacts are published if your workflow needs deterministic installs.
+
+Windows install is manual zip install for MVP v1.0.0. Download the Windows zip from the CLI release, add `speq.exe` to `PATH`, and run `speq` directly or through `mode: custom`; the action does not install Windows zips in MVP.
 
 ## Reference workflows
 
